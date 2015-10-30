@@ -1,0 +1,85 @@
+body {
+  font-family: 'Helvetica Neue', Verdana, Helvetica, Arial, sans-serif;
+  margin: 0 auto;
+  padding-top: 30px;
+  -webkit-font-smoothing: antialiased;
+  font-size: 1.5em;
+  color: #333;
+  line-height: 1.5em;
+}
+
+h1, h2, h3 {
+  color: #000;
+}
+
+h1 {
+  font-size: 2.5em
+}
+
+h2 {
+  font-size: 2em
+}
+
+h3 {
+  font-size: 1.5em
+}
+
+a {
+  text-decoration: none;
+  color: #09f;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.slide {
+    position: relative;
+    width: 75%;
+    min-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 25px;
+    min-height: 500px;
+    box-shadow: 20px 10px 40px 10px gainsboro;
+    border-top: 10px solid #5881D8;
+    border-bottom: 10px solid #63B132;
+}
+
+.slide_title {
+    margin-bottom: 60px;
+}
+
+.slide_content {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 15px;
+}
+
+.slide_img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.slide_img_description {
+    text-align: center;
+    margin: 50px 0;
+}
+
+.slide_switch_buttons {
+    width: 100%;
+    box-sizing: border-box;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 10px 20px;
+}
+
+.previous_slide_button {
+    float: left;
+}
+
+.next_slide_button {
+    float: right;
+}
