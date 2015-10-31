@@ -4,7 +4,9 @@
               [secretary.core :as secretary :include-macros true]
               [goog.events :as events]
               [goog.history.EventType :as EventType]
-              [clojure.string :as str])
+              [clojure.string :as str]
+              cljsjs.highlight
+              cljsjs.highlight.langs.clojure)
     (:import goog.History))
 
 (enable-console-print!)
@@ -13,34 +15,60 @@
   ([url] (go-to-url! (.-location js/window) url))
   ([loc url] (aset loc "hash" url)))
 
-
 (defn current-slide-number [location]
   (-> (aget location "hash")
       (str/split #"/")
       last
       (js/parseInt)))
 
+(defn go-to-slide! [number]
+    (go-to-url! (str "#/slide/" number)))
+
 (defn next-slide! []
   (let [current-slide (current-slide-number (.-location js/window))]
-    (go-to-url! (str "#/slide/" (inc current-slide)))))
+    (go-to-slide! (inc current-slide))))
 
 (defn previous-slide! []
   (let [current-slide (current-slide-number (.-location js/window))]
     (when (not (< 0 current-slide-number))
-        (go-to-url! (str "#/slide/" (dec current-slide))))))
+        (go-to-slide! (dec current-slide)))))
 
+;; -------------------------
+;; Util components
+(def previous-slide-arrow
+    [:span.previous_slide_button.slide_button {:on-click previous-slide!}
+     "\u2b05"])
+
+(def next-slide-arrow
+    [:span.next_slide_button.slide_button {:on-click next-slide!}
+        "\u27a1"])
 
 ;; -------------------------
 ;; Slide types
+(defn home-slide [title subtitle author date]
+  [:div.slide
+   [:h1#home_title title]
+   [:h3#home_subtitle subtitle]
+   [:div#home_other_infos
+    [:h4#home_author author]
+    [:h5#home_date date]]
+   [:div.slide_switch_buttons
+    next-slide-arrow]])
+
+(defn end-slide [text subtext]
+  [:div#end_slide.slide
+   [:h1#end_text text]
+   [:h3#end_subtext subtext]
+   [:div.slide_switch_buttons previous-slide-arrow]])
+
+
+
 (defn default-slide [title & content]
   [:div.slide
    [:h1.slide_title title]
    [:div.slide_content content]
    [:div.slide_switch_buttons
-    [:span.previous_slide_button {:on-click previous-slide!}
-     "PREVIOUS"]
-    [:span.next_slide_button {:on-click next-slide!}
-     "NEXT"]]])
+    previous-slide-arrow next-slide-arrow]])
 
 (defn text-slide [title & paragraphs]
   (default-slide
@@ -60,12 +88,40 @@
     [:img.slide_img {:src img-url}]
     [:p.slide_img_description img-description]))
 
+
+(defn code-component []
+    (fn [code] [:pre [:code.clojure code]]))
+
+(defn highlight-code [html-node]
+  (let [nodes (.querySelectorAll html-node "pre code")]
+    (loop [i (.-length nodes)]
+      (when-not (neg? i)
+        (when-let [item (.item nodes i)]
+          (.highlightBlock js/hljs item))
+        (recur (dec i))))))
+
+(def syntax-highlight-wrapper
+  (with-meta code-component
+    {:component-did-mount
+     (fn [this] (let [node (reagent/dom-node this)]
+                  (highlight-code node)))}))
+
+(defn code-slide
+  ([title code description]
+   (default-slide
+     title
+     [syntax-highlight-wrapper code]
+     [:p.code_description description]))
+  ([title code]
+   (code-slide title code "")))
+
 ;; -------------------------
 ;; Views
-
-(defn home-page []
-  [:div [:h2 "Welcome to clojure-presentation"]
-   [:div [:a {:href "#/slide/1"} "Start presentation"]]])
+(defn home-slide-example []
+  (home-slide "Clojure"
+              "a pragmatic functional language"
+              "by Alexandre Gariépy"
+              "November the 13th, 2015"))
 
 (defn text-slide-example []
   (text-slide "Text slide" "this slide contains some text."
@@ -83,22 +139,34 @@
              "http://verse.aasemoon.com/images/5/51/Clojure-Logo.png"
              "this is the clojure logo"))
 
+(defn code-slide-example []
+  (code-slide "Code slide"
+              (str "(let [a 2]\n"
+                   "  (+ 3 a))")
+              "field for a short code descripion"))
+
+(defn end-slide-example []
+  (end-slide "Thank you"
+             "Any questions?"))
+
 (defn current-page []
   [:div [(session/get :current-page)]])
 
 
 ;; -------------------------
 ;; Routes
-
-(def slides [home-page
+(def slides [home-slide-example
              text-slide-example
              bullet-point-slide-example
-             image-slide-example])
+             image-slide-example
+             code-slide-example
+             end-slide-example])
 
 (secretary/set-config! :prefix "#")
 
 (secretary/defroute "/" []
-  (session/put! :current-page home-page))
+  (go-to-slide! 0)
+  (session/put! :current-page (first slides)))
 
 (secretary/defroute #"/slide/(\d+)" [id]
   (->> id
@@ -121,6 +189,7 @@
 ;; Initialize app
 (defn mount-root []
   (reagent/render [current-page] (.getElementById js/document "app")))
+
 
 (defn init! []
   (hook-browser-navigation!)

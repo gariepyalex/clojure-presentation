@@ -35,15 +35,33 @@ a:hover {
 
 .slide {
     position: relative;
-    width: 75%;
+    width: 70%;
     min-width: 600px;
     margin-left: auto;
     margin-right: auto;
     padding: 25px;
-    min-height: 500px;
+    min-height: 600px;
     box-shadow: 20px 10px 40px 10px gainsboro;
     border-top: 10px solid #5881D8;
     border-bottom: 10px solid #63B132;
+}
+
+#home_title {
+    font-size: 3.5em;
+    border-bottom: 15px solid #90B4FE;
+    display: inline-block;
+}
+
+#home_subtitle {
+    font-style: italic;
+}
+
+#home_other_infos {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin-left: 25px;
+    color: #777
 }
 
 .slide_title {
@@ -76,10 +94,28 @@ a:hover {
     padding: 10px 20px;
 }
 
+.slide_button {
+    cursor: pointer;
+    font-size: 1.5em;
+    color: #444;
+}
+
 .previous_slide_button {
     float: left;
 }
 
 .next_slide_button {
     float: right;
+}
+
+#end_slide {
+    text-align: center;
+}
+
+#end_text {
+    margin-top: 180px;
+}
+
+#end_subtext {
+    color: #555;
 }
