@@ -1,13 +1,18 @@
 (ns clojure-presentation.core
-    (:require [reagent.core :as reagent]
-              [reagent.session :as session]
-              [secretary.core :as secretary :include-macros true]
-              [goog.events :as events]
-              [goog.history.EventType :as EventType]
-              [clojure.string :as str]
-              cljsjs.highlight
-              cljsjs.highlight.langs.clojure)
-    (:import goog.History))
+  (:require-macros [cljs.core.async.macros :refer [go]])
+  (:require [reagent.core :as reagent]
+            [reagent.session :as session]
+            [secretary.core :as secretary :include-macros true]
+            [goog.events :as events]
+            [goog.history.EventType :as HistoryEventType]
+            [goog.events.EventType :as EventType]
+            [goog.dom :as dom]
+            [goog.events :as events]
+            [cljs.core.async :refer [put! chan <!]]
+            [clojure.string :as str]
+            cljsjs.highlight
+            cljsjs.highlight.langs.clojure)
+  (:import goog.History))
 
 (enable-console-print!)
 
@@ -30,7 +35,7 @@
 
 (defn previous-slide! []
   (let [current-slide (current-slide-number (.-location js/window))]
-    (when (not (< 0 current-slide-number))
+    (when (< 0 current-slide)
         (go-to-slide! (dec current-slide)))))
 
 ;; -------------------------
@@ -180,17 +185,44 @@
 (defn hook-browser-navigation! []
   (doto (History.)
     (events/listen
-     EventType/NAVIGATE
+     HistoryEventType/NAVIGATE
      (fn [event]
        (secretary/dispatch! (.-token event))))
     (.setEnabled true)))
+
+
+;; -------------------------
+;; Key bindings
+(def key-codes {:left-arrow 37
+                :right-arrow 39})
+
+(defn handle-key-event! [keycode]
+  (println keycode)
+  (condp = keycode
+      (:left-arrow key-codes) (previous-slide!)
+      (:right-arrow key-codes) (next-slide!)
+      nil))
+
+
+(defn listen-events [element event-type]
+  (let [out (chan)]
+    (events/listen element event-type
+                   (fn [event] (put! out event)))
+    out))
+
+(defn hook-key-events! []
+    (let [keypresses (listen-events (.-body js/document) "keypress")]
+    (go (while true
+            (let [key-event (<! keypresses)
+                char-code (.-charCode key-event)]
+            (handle-key-event! char-code))))))
 
 ;; -------------------------
 ;; Initialize app
 (defn mount-root []
   (reagent/render [current-page] (.getElementById js/document "app")))
 
-
 (defn init! []
   (hook-browser-navigation!)
+  (hook-key-events!)
   (mount-root))
