@@ -119,3 +119,21 @@ a:hover {
 #end_subtext {
     color: #555;
 }
+
+.slide_column {
+    box-sizing: border-box;
+    width: 50%;
+    padding: 10px;
+}
+
+.slide_content_left {
+    float: left;
+}
+
+.slide_content_right {
+    float: right;
+}
+
+.column_title {
+    margin-top: 0;
+}

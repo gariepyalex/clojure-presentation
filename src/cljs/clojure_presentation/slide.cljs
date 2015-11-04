@@ -11,6 +11,7 @@
             [cljs.core.async :refer [put! chan <!]]
             [clojure.string :as str]
             cljsjs.highlight
+
             cljsjs.highlight.langs.clojure)
   (:import goog.History))
 
@@ -50,6 +51,48 @@
         "\u27a1"])
 
 ;; -------------------------
+;; Slide content
+
+(defn text-content [& paragraphs]
+  [:div
+   (for [p paragraphs] [:p p])])
+
+(defn bullet-point-content [& bullets]
+  [:ul
+   (for [b bullets]
+     [:li b])])
+
+(defn img-content [img-url img-description]
+  [:div
+   [:img.slide_img {:src img-url}]
+   [:p.slide_img_description img-description]])
+
+(defn- code-component []
+  (fn [code] [:pre [:code.clojure code]]))
+
+(defn- highlight-code [html-node]
+  (let [nodes (.querySelectorAll html-node "pre code")]
+    (loop [i (.-length nodes)]
+      (when-not (neg? i)
+        (when-let [item (.item nodes i)]
+          (.highlightBlock js/hljs item))
+        (recur (dec i))))))
+
+(def syntax-highlight-wrapper
+  (with-meta code-component
+    {:component-did-mount
+     (fn [this] (let [node (reagent/dom-node this)]
+                  (highlight-code node)))}))
+
+(defn code-content
+  ([code description]
+   [:div
+    [syntax-highlight-wrapper code]
+    [:p.code_description description]])
+  ([code]
+   (code-content code "")))
+
+;; -------------------------
 ;; Slide types
 (defn home-slide [title subtitle author date]
   [:div.slide
@@ -67,66 +110,28 @@
    [:h3#end_subtext subtext]
    [:div.slide_switch_buttons previous-slide-arrow]])
 
-
-
 (defn default-slide [title & content]
   [:div.slide
    [:h1.slide_title title]
-   [:div.slide_content content]
+   (into [:div.slide_content] content) 
    [:div.slide_switch_buttons
     previous-slide-arrow next-slide-arrow]])
 
-(defn text-slide [title & paragraphs]
-  (default-slide
-    title
-    (for [p paragraphs] [:p p])))
-
-(defn bullet-point-slides [title & bullets]
-  (default-slide
-    title
-    [:ul
-     (for [b bullets]
-       [:li b])]))
-
-(defn img-slide [title img-url img-description]
-  (default-slide
-    title
-    [:img.slide_img {:src img-url}]
-    [:p.slide_img_description img-description]))
-
-
-(defn code-component []
-    (fn [code] [:pre [:code.clojure code]]))
-
-(defn highlight-code [html-node]
-  (let [nodes (.querySelectorAll html-node "pre code")]
-    (loop [i (.-length nodes)]
-      (when-not (neg? i)
-        (when-let [item (.item nodes i)]
-          (.highlightBlock js/hljs item))
-        (recur (dec i))))))
-
-(def syntax-highlight-wrapper
-  (with-meta code-component
-    {:component-did-mount
-     (fn [this] (let [node (reagent/dom-node this)]
-                  (highlight-code node)))}))
-
-(defn code-slide
-  ([title code description]
-   (default-slide
-     title
-     [syntax-highlight-wrapper code]
-     [:p.code_description description]))
-  ([title code]
-   (code-slide title code "")))
-
-
-(defn current-page []
-  [:div [(session/get :current-page)]])
+(defn two-column-slide [title title-left content-left title-right content-right]
+  [:div.slide
+   [:h1.slide_title title]
+   [:div.slide_column.slide_content_left [:h3.column_title title-left]
+    content-left]
+   [:div.slide_column.slide_content_right [:h3.column_title title-right]
+    content-right]
+   [:div.slide_switch_buttons
+    previous-slide-arrow next-slide-arrow]])
 
 ;; -------------------------
 ;; Routing
+(defn current-page []
+  [:div [(session/get :current-page)]])
+
 (secretary/set-config! :prefix "#")
 
 (secretary/defroute "/" []
