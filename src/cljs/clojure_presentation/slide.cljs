@@ -11,8 +11,10 @@
             [cljs.core.async :refer [put! chan <!]]
             [clojure.string :as str]
             cljsjs.highlight
-
-            cljsjs.highlight.langs.clojure)
+            cljsjs.highlight.langs.clojure
+            cljsjs.highlight.langs.python
+            cljsjs.highlight.langs.java
+            cljsjs.highlight.langs.cpp)
   (:import goog.History))
 
 (defonce state (reagent/atom {}))
@@ -52,7 +54,6 @@
 
 ;; -------------------------
 ;; Slide content
-
 (defn text-content [& paragraphs]
   [:div
    (for [p paragraphs] [:p p])])
@@ -67,8 +68,13 @@
    [:img.slide_img {:src img-url}]
    [:p.slide_img_description img-description]])
 
+(defn- code-language [language]
+  (keyword (str "code." language)))
+
 (defn- code-component []
-  (fn [code] [:pre [:code.clojure code]]))
+  (fn [code language]
+    [:pre
+     [(code-language language) code]]))
 
 (defn- highlight-code [html-node]
   (let [nodes (.querySelectorAll html-node "pre code")]
@@ -85,12 +91,13 @@
                   (highlight-code node)))}))
 
 (defn code-content
-  ([code description]
+  ([code & {:keys [description language]
+            :or {description ""
+                 language "clojure"}}]
+   (println language)
    [:div
-    [syntax-highlight-wrapper code]
-    [:p.code_description description]])
-  ([code]
-   (code-content code "")))
+    [syntax-highlight-wrapper code language]
+    [:p.code_description description]]))
 
 ;; -------------------------
 ;; Slide types

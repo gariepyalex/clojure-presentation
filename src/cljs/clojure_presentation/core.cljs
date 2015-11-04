@@ -9,14 +9,11 @@
                     "by Alexandre Gariépy"
                     "November the 13th, 2015"))
 
-(defn simili-python []
-  (slide/default-slide "Regardez ce python"
-    (slide/code-content "myFunc(1, 2, 3, 4)")))
-
-(defn simili-clojure []
-  (slide/default-slide "OMG!"
-    (slide/code-content "(myFunc 1, 2, 3, 4)")
-    (slide/bullet-point-content "also" "some" "bullets")))
+(defn multi-lang-code-example []
+  (slide/default-slide "Regardez ce code"
+    (slide/code-content "def toto(a, b, c):" :language "python")
+    (slide/code-content "public static void main(String[] args){}" :language "java")
+    (slide/code-content "(defn -main [x] (println x))" :language "clojure")))
 
 (defn text-slide-example []
   (slide/default-slide "Text slide" "this slide contains some text."
@@ -56,8 +53,7 @@
                    "Any questions?"))
 
 (def slides [home-slide-example
-             simili-python
-             simili-clojure
+             multi-lang-code-example
              text-slide-example
              bullet-point-slide-example
              image-slide-example
