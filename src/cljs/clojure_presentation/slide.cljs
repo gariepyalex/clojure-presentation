@@ -155,6 +155,7 @@
        (secretary/dispatch! (.-token event))))
     (.setEnabled true)))
 
+(enable-console-print!)
 
 ;; -------------------------
 ;; Key bindings
@@ -175,10 +176,10 @@
     out))
 
 (defn hook-key-events! []
-    (let [keypresses (listen-events (.-body js/document) "keypress")]
+  (let [keypresses (listen-events (.-body js/document) "keydown")]
     (go (while true
-            (let [key-event (<! keypresses)
-                char-code (.-charCode key-event)]
+          (let [key-event (<! keypresses)
+                char-code (.-keyCode key-event)]
             (handle-key-event! char-code))))))
 
 ;; -------------------------
