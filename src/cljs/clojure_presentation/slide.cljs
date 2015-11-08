@@ -55,8 +55,8 @@
 ;; -------------------------
 ;; Slide content
 (defn text-content [& paragraphs]
-  [:div
-   (for [p paragraphs] [:p p])])
+  (into [:div]
+   (for [p paragraphs] [:p p])))
 
 (defn bullet-point-content [& bullets]
   [:ul
@@ -94,7 +94,6 @@
   ([code & {:keys [description language]
             :or {description ""
                  language "clojure"}}]
-   (println language)
    [:div
     [syntax-highlight-wrapper code language]
     [:p.code_description description]]))
