@@ -10,13 +10,6 @@
             [ring.util.response :refer [response]]
             [environ.core :refer [env]]))
 
-(def mount-target
-  [:div#app
-      [:h3 "ClojureScript has not been compiled!"]
-      [:p "please run "
-       [:b "lein figwheel"]
-       " in order to start the compiler"]])
-
 (def home-page
   (html
    [:html
@@ -28,7 +21,7 @@
      (include-css "css/highlightjs.default.css")
      (include-css "css/web_demo.css")]
     [:body
-     mount-target
+     [:div#app]
      (include-js "js/app.js")]]))
 
 (def data {:members [{:name "John Lennon"
@@ -41,7 +34,7 @@
                       :popularity 11}
                      {:name "George Harrison"
                       :year-of-birth 1943
-                      :qualities ["his guitar gentley weeps"]
+                      :qualities ["his guitar gently weeps"]
                       :popularity 10}
                      {:name "Ringo Starr"
                       :year-of-birth 1940
@@ -55,7 +48,9 @@
   (not-found "Not Found"))
 
 (def app
-  (let [handler (-> routes
-                    wrap-json-response
-                    (wrap-defaults site-defaults))]
-    (if (env :dev) (-> handler wrap-exceptions wrap-reload) handler)))
+  (let [handler (-> routes wrap-json-response (wrap-defaults site-defaults))]
+    (if (env :dev)
+      (-> handler wrap-exceptions wrap-reload)
+      handler)))
+
+;; The "site" defaults add support for parameters, cookies, sessions, static resources, file uploads, and a bunch of browser-specific security headers.

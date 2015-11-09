@@ -7,9 +7,17 @@
 ;; Views
 (defn home-slide-example []
   (slide/home-slide "Clojure"
-                    "a pragmatic functional language"
+                    "Un langage fonctionnel pragmatique"
                     "by Alexandre Gariépy"
                     "November the 11th, 2015"))
+
+(defn plan []
+  (slide/default-slide "Plan de la présentation"
+    (slide/bullet-point-content "Programmation fonctionnelle"
+                                "Démo: nombre premiers"
+                                "Avantages de Clojure"
+                                "Démo: web"
+                                "Quelques liens")))
 
 (defn que-fait-ce-python? []
   (slide/default-slide "Que fait ce code?"
@@ -31,7 +39,7 @@
     (slide/bullet-point-content "Chaque objet doit encapsuler ses variables"
                                 "Mène à des interactions complexes entre des objets"
                                 "Très difficile de prédire l'état du système"
-                                "Doit isoler les composantes pour les tester (mocks")))
+                                "Doit isoler les composantes pour les tester (mocks)")))
 
 (defn immutability []
   (slide/default-slide "Immutabilité en clojure"
@@ -77,7 +85,7 @@
                                 "Complexité provient de la composition de fonction simples")))
 
 (defn immutability-pure-function-recap []
-  (slide/default-slide "Immutabilité - Fonctions pure"
+  (slide/default-slide "Immutabilité - Fonctions pures"
     (slide/bullet-point-content "Facile à comprendre"
                                 "Facile à tester (pas de mocks)"
                                 "Multithreading sans locks!")))
@@ -94,19 +102,46 @@
     (slide/text-content "Générateur de nombre premiers")))
 
 (defn demo1-recap []
-  (slide/default-slide "Démo"
-    (slide/bullet-point-content "Développement dynamique avec le REPL"
-                                "Code as data"
-                                "Style déclaratif"
-                                "Laziness")))
+  (slide/two-column-slide
+   "Pourquoi Clojure?"
+   "Pure"
+   (slide/bullet-point-content "Laziness"
+                               "Fonctions d'ordre supérieur"
+                               "Code as data (Lisp)"
+                               "Immutabilité stricte"
+                               "Structures de données immuables")
+   "Pragmatique"
+   (slide/bullet-point-content "Pure, mais pas trop (Haskell...)"
+                               "Interop Java/Javascript"
+                               "Développement dynamique avec le REPL"
+                               "Met l'accent sur la simplicité")))
 
 (defn demo-web []
   (slide/default-slide "Démo web"
     (slide/custom-content (web-demo/web-demo-component))))
 
+(defn to-know-more1 []
+  (slide/default-slide
+    "Pour en savoir plus"
+    (slide/img-content "http://www.braveclojure.com/assets/images/home/book-cover.jpg"
+                       "Livre gratuit sur le web")))
+
+(defn to-know-more2 []
+  (slide/default-slide
+    "Pour en savoir plus"
+    (slide/img-content "https://raw.githubusercontent.com/matthiasn/talk-transcripts/master/Hickey_Rich/SimpleMadeEasy/00.00.00.jpg"
+                       "Et ClojureTV sur YouTube")))
+
+(defn to-know-more3 []
+  (slide/default-slide
+    "Pour en savoir plus"
+    (slide/text-content "Robert C Martin - Functional Programming; What? Why? When?"
+                        "https://www.youtube.com/watch?v=7Zlp9rKHGD4")))
+  
+
 (defn end-slide-example []
-  (slide/end-slide "Thank you"
-                   "Any questions?"))
+  (slide/end-slide "Merci"
+                   "Des questions?"))
 
 (def slides [home-slide-example
              que-fait-ce-python?
@@ -121,6 +156,9 @@
              demo1
              demo1-recap
              demo-web
+             to-know-more1
+             to-know-more2
+             to-know-more3
              end-slide-example])
 
 (defn -main

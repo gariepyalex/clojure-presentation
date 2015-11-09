@@ -20,7 +20,7 @@
 
   (defn equals-ten?
     [y]
-    (= x y))
+    (= 10 y))
   
   (defn plus-two
     [y]
@@ -30,7 +30,7 @@
 
   (reduce + v)
 
-  (filter equals-ten? v))
+  (filter equals-ten? (conj v 10)))
 
 ;; ===========================================================================
 ;; Laziness
@@ -55,7 +55,7 @@
   true)
   ;;(zero? (mod b a)))
 
-(defn factor-to-verify
+(defn factors-to-verify
   [x]
   (if (= 2 x)
     nil
@@ -66,7 +66,7 @@
   false) 
 ;;  (nil?
 ;;   (first (filter #(divides? % x)
-;;                  (factor-to-verify x)))))
+;;                  (factors-to-verify x)))))
 
 (def prime-numbers
   (filter prime? (range 2 Integer/MAX_VALUE)))
