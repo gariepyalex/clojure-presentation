@@ -1,0 +1,43 @@
+/*
+#web_demo {
+    margin-bottom: 30px;
+}
+
+#web_demo_members {
+    width: 100%;
+    display: flex;
+    align-item: flex-start;
+    flex-wrap: wrap;
+}
+
+.web_demo_member {
+    flex: 1 0 45%;
+    border: 2px solid grey;
+}
+
+.web_demo_member h3 {
+    font-size: 20px;
+}
+
+.web_demo_member h4 {
+    font-size: 15px;
+}
+
+.web_demo_member p {
+    font-size: 18px;
+}
+
+.web_demo_member ul li{
+    font-size: 18px;
+    margin: 0; 
+}
+
+.web_demo_member > * {
+    margin: 0; 
+}
+
+#top_member {
+    font-size: 30px;
+    color: red;
+}
+/* */

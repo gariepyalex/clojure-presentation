@@ -1,5 +1,6 @@
 (ns clojure-presentation.core
   (:require [clojure-presentation.slide :as slide]
+            [clojure-presentation.web-demo :as web-demo]
             [clojure.string :as string]))
 
 ;; -------------------------
@@ -24,6 +25,13 @@
                              "    some_function(a)\n"
                              "    print(a)")
                         :language "python")))
+
+(defn mutability []
+  (slide/default-slide "Impossible à prédire!"
+    (slide/bullet-point-content "Chaque objet doit encapsuler ses variables"
+                                "Mène à des interactions complexes entre des objets"
+                                "Très difficile de prédire l'état du système"
+                                "Doit isoler les composantes pour les tester (mocks")))
 
 (defn immutability []
   (slide/default-slide "Immutabilité en clojure"
@@ -74,46 +82,27 @@
                                 "Facile à tester (pas de mocks)"
                                 "Multithreading sans locks!")))
 
-(defn multi-lang-code-example []
-  (slide/default-slide "Regardez ce code"
-    (slide/code-content "def toto(a, b, c):" :language "python")
-    (slide/code-content "public static void main(String[] args){}" :language "java")
-    (slide/code-content "(defn -main [x] (println x))" :language "clojure")))
+(defn data-orientation []
+  (slide/default-slide "Clojure est orienté data"
+    (slide/bullet-point-content "Manipulation de structures de données immuables"
+                                "Déclaratif vs Impératif"
+                                "Code as data"
+                                "Lisp = LISt Processing")))
 
-(defn text-slide-example []
-  (slide/default-slide "Text slide" 
-    (slide/text-content
-     "This slide contains some text."
-     "This is the most basic type of slide."
-     "Each string passed is a <p> tag.")))
+(defn demo1 []
+  (slide/default-slide "Démo"
+    (slide/text-content "Générateur de nombre premiers")))
 
-(defn bullet-point-slide-example []
-  (slide/default-slide "Bullet point slide"
-    (slide/bullet-point-content "this slide contains bullet points"
-                                "some next text"
-                                "so on.")))
+(defn demo1-recap []
+  (slide/default-slide "Démo"
+    (slide/bullet-point-content "Développement dynamique avec le REPL"
+                                "Code as data"
+                                "Style déclaratif"
+                                "Laziness")))
 
-(defn image-slide-example []
-  (slide/default-slide "Image slide"
-    (slide/img-content "http://verse.aasemoon.com/images/5/51/Clojure-Logo.png"
-                       "this is the clojure logo")))
-
-(defn code-slide-example []
-  (slide/default-slide "Code slide"
-    (slide/code-content (str "(let [a 2]\n"
-                             "  (+ 3 a))")
-                        "field for a short code descripion")))
-
-(defn column-slide-example []
-  (slide/two-column-slide "Two columns!"
-                          "Some code"
-                          (slide/code-content "(+ 3 4 5)"
-                                              "Really cool addition")
-                          "Some comments"
-                          (slide/bullet-point-content "much precision"
-                                                      "on the very nice"
-                                                      "clojure language")))
-
+(defn demo-web []
+  (slide/default-slide "Démo web"
+    (slide/custom-content (web-demo/web-demo-component))))
 
 (defn end-slide-example []
   (slide/end-slide "Thank you"
@@ -122,17 +111,16 @@
 (def slides [home-slide-example
              que-fait-ce-python?
              que-fait-ce-python?-2
+             mutability
              immutability
              immutability-code-example
              immutability-is-good
              pure-fuction
              immutability-pure-function-recap
-             multi-lang-code-example
-             text-slide-example
-             bullet-point-slide-example
-             image-slide-example
-             code-slide-example
-             column-slide-example
+             data-orientation
+             demo1
+             demo1-recap
+             demo-web
              end-slide-example])
 
 (defn -main

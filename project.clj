@@ -11,13 +11,15 @@
                  [reagent-utils "0.1.5"]
                  [ring "1.4.0"]
                  [ring/ring-defaults "0.1.5"]
+                 [ring/ring-json "0.4.0"]
                  [prone "0.8.2"]
                  [compojure "1.4.0"]
                  [hiccup "1.0.5"]
                  [environ "1.0.1"]
                  [org.clojure/clojurescript "1.7.145" :scope "provided"]
                  [secretary "1.2.3"]
-                 [cljsjs/highlight "8.4-0"]]
+                 [cljsjs/highlight "8.4-0"]
+                 [cljs-ajax "0.5.1"]]
 
   :plugins [[lein-environ "1.0.1"]
             [lein-asset-minifier "0.2.2"]]
@@ -36,7 +38,7 @@
                                     [:cljsbuild :builds :app :compiler :output-to]]
 
   :source-paths ["src/clj"]
-
+  :test-paths ["test/clj"]
   :minify-assets
   {:assets
     {"resources/public/css/site.min.css" "resources/public/css/site.css"}}

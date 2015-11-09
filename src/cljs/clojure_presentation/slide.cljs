@@ -91,12 +91,17 @@
                   (highlight-code node)))}))
 
 (defn code-content
-  ([code & {:keys [description language]
-            :or {description ""
-                 language "clojure"}}]
-   [:div
-    [syntax-highlight-wrapper code language]
-    [:p.code_description description]]))
+  [code & {:keys [description language]
+           :or {description ""
+                language "clojure"}}]
+  [:div
+   [syntax-highlight-wrapper code language]
+   [:p.code_description description]])
+
+(defn custom-content
+  [& components]
+  (for [c components]
+    [c]))
 
 ;; -------------------------
 ;; Slide types
