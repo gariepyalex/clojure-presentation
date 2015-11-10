@@ -14,7 +14,7 @@
 (defn plan []
   (slide/default-slide "Plan de la présentation"
     (slide/bullet-point-content "Programmation fonctionnelle"
-                                "Démo: nombre premiers"
+                                "Démo: nombres premiers"
                                 "Avantages de Clojure"
                                 "Démo: web"
                                 "Quelques liens")))
@@ -42,14 +42,14 @@
                                 "Doit isoler les composantes pour les tester (mocks)")))
 
 (defn immutability []
-  (slide/default-slide "Immutabilité en clojure"
+  (slide/default-slide "Immuabilité en clojure"
     (slide/bullet-point-content "Clojure impose une discipline stricte sur l'assignation"
                                 "Les \"variable\" sont immuables"
                                 "Les collections sont immuables")))
   
 (defn immutability-code-example []
   (slide/two-column-slide
-   "Immutabilité..."
+   "Immuabilité..."
    "des variables"
    (slide/code-content (string/join "\n"
                                     ["(def a 2)"
@@ -85,7 +85,7 @@
                                 "Complexité provient de la composition de fonction simples")))
 
 (defn immutability-pure-function-recap []
-  (slide/default-slide "Immutabilité - Fonctions pures"
+  (slide/default-slide "Immuabilité - Fonctions pures"
     (slide/bullet-point-content "Facile à comprendre"
                                 "Facile à tester (pas de mocks)"
                                 "Multithreading sans locks!")))
@@ -99,7 +99,7 @@
 
 (defn demo1 []
   (slide/default-slide "Démo"
-    (slide/text-content "Générateur de nombre premiers")))
+    (slide/text-content "Générateur de nombres premiers")))
 
 (defn demo1-recap []
   (slide/two-column-slide
@@ -108,7 +108,7 @@
    (slide/bullet-point-content "Laziness"
                                "Fonctions d'ordre supérieur"
                                "Code as data (Lisp)"
-                               "Immutabilité stricte"
+                               "Immuabilité stricte"
                                "Structures de données immuables")
    "Pragmatique"
    (slide/bullet-point-content "Pure, mais pas trop (Haskell...)"

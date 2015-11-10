@@ -6,7 +6,7 @@
             [hiccup.page :refer [include-js include-css]]
             [prone.middleware :refer [wrap-exceptions]]
             [ring.middleware.reload :refer [wrap-reload]]
-            [ring.middleware.json :refer [wrap-json-response]]
+            [ring.middleware.transit :refer [wrap-transit-response]]
             [ring.util.response :refer [response]]
             [environ.core :refer [env]]))
 
@@ -48,7 +48,9 @@
   (not-found "Not Found"))
 
 (def app
-  (let [handler (-> routes wrap-json-response (wrap-defaults site-defaults))]
+  (let [handler (-> routes
+                    (wrap-transit-response {:encoding :json, :opts {}})
+                    (wrap-defaults site-defaults))]
     (if (env :dev)
       (-> handler wrap-exceptions wrap-reload)
       handler)))

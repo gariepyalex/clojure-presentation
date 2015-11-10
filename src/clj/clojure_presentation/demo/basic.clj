@@ -43,7 +43,7 @@
 
   (sleep-and-return 1000)
 
-  (take 1 (map sleep-and-return (repeat 10 1000)))) ;; sequence de 10 fois 1000
+  (first (map sleep-and-return (repeat 10 1000)))) ;; sequence de 10 fois 1000
 
 
 ;; ===========================================================================

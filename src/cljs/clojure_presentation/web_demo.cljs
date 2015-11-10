@@ -12,9 +12,7 @@
 
 (defn update-data! 
   []
-  (GET "/data"
-       {:response-format (ajax/json-response-format {:keywords? true})
-        :handler update-data-handler}))
+  (GET "/data" {:handler update-data-handler}))
 
 (defn vote-member!
   [index]
