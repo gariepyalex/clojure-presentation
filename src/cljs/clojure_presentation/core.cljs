@@ -22,14 +22,14 @@
 (defn que-fait-ce-python? []
   (slide/default-slide "Que fait ce code?"
     (slide/code-content (str "def print_number():\n"
-                             "    a = 2\n"
+                             "    a = [2]\n"
                              "    print(a)")
                         :language "python")))
 
 (defn que-fait-ce-python?-2 []
   (slide/default-slide "Que fait ce code?"
     (slide/code-content (str "def print_number():\n"
-                             "    a = 2\n"
+                             "    a = [2]\n"
                              "    some_function(a)\n"
                              "    print(a)")
                         :language "python")))
@@ -75,14 +75,14 @@
                                      "(function3 a)"
                                      "(eval a)"
                                      ";; => [1 2 3]"]))
-    (slide/text-content "Pas d'effets de bord, pas de surprise")))
+    (slide/text-content "Pas d'effet de bord, pas de surprise")))
 
 (defn pure-fuction []
   (slide/default-slide "Fonction pure"
     (slide/bullet-point-content "f(x, y) = 3x + 6y + 5"
                                 "Input/output"
                                 "Pas d'effet de bord"
-                                "Complexité provient de la composition de fonction simples")))
+                                "Complexité provient de la composition de fonctions simples")))
 
 (defn immutability-pure-function-recap []
   (slide/default-slide "Immuabilité - Fonctions pures"
@@ -99,7 +99,16 @@
 
 (defn demo1 []
   (slide/default-slide "Démo"
-    (slide/text-content "Générateur de nombres premiers")))
+    (slide/text-content "Générateur de nombres premiers")
+    (slide/code-content (str "def is_prime(n):\n"
+                             "    if n == 2:\n"
+                             "        return true\n"
+                             "    root = floor(n**0.5)\n"
+                             "    for i in range(2, root + 1)\n"
+                             "        if n % i == 0:\n"
+                             "            return false\n"
+                             "    return true\n")
+                        :language "python")))
 
 (defn demo1-recap []
   (slide/two-column-slide

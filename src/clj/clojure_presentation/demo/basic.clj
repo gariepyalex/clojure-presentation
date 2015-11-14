@@ -20,6 +20,7 @@
 
   (defn equals-ten?
     [y]
+    (println y)
     (= 10 y))
   
   (defn plus-two
@@ -28,13 +29,12 @@
 
   (map plus-two v)
 
-  (reduce + v)
+  (reduce + 10 v)
 
   (filter equals-ten? (conj v 10)))
 
 ;; ===========================================================================
 ;; Laziness
-
 (comment
   (defn sleep-and-return
     [x]
@@ -52,8 +52,8 @@
 (defn divides?
   "True if a divides b"
   [a b]
-  true)
-  ;;(zero? (mod b a)))
+  ;;true)
+  (zero? (mod b a)))
 
 (defn factors-to-verify
   [x]
@@ -63,10 +63,10 @@
 
 (defn prime?
   [x]
-  false) 
-;;  (nil?
-;;   (first (filter #(divides? % x)
-;;                  (factors-to-verify x)))))
+;;  false) 
+  (nil?
+   (first (filter #(divides? % x)
+                  (factors-to-verify x)))))
 
 (def prime-numbers
   (filter prime? (range 2 Integer/MAX_VALUE)))
